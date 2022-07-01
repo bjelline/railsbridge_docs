@@ -1,7 +1,7 @@
 tip do
-  console_with_message "From here on, this guide assumes you have Rails 5.0.x. To check your Rails version, type this in the terminal:", "rails -v"
-  fuzzy_result "Rails 5.0{FUZZY}.x{/FUZZY}"
-  message "If your computer reports a Rails version less than 5.0, ask a TA help get you back on track."
+  console_with_message "From here on, this guide assumes you have Rails 7.0.x. To check your Rails version, type this in the terminal:", "rails -v"
+  fuzzy_result "Rails 7.0{FUZZY}.x{/FUZZY}"
+  message "If your computer reports a Rails version less than 7.0, ask a TA help get you back on track."
 end
 
 step "Change to your home directory" do
@@ -20,9 +20,9 @@ end
 
 step "Create a new Rails app" do
 
-  console "rails new test_app"
+  console "rails new test_app -d sqlite3"
 
-  message "The command's output is voluminous, and will take some time to complete, with a long pause in the middle, after all the 'create...' statements ending in 'bundle install'.  When it fully completes, it will return you to your home prompt.  Look for the 'Bundle complete!' message just above."
+  message "The command's output is voluminous, and will take some time to complete, with a long pause in the middle, after all the 'create...' statements ending in 'bundle install'.  When it fully completes, it will return you to your home prompt."
 
   console "cd test_app"
   console "rails server"
@@ -45,13 +45,16 @@ step "Create a new Rails app" do
 
   fuzzy_result <<-TEXT
     => Booting Puma
-    => Rails 5.0{FUZZY}.0{/FUZZY} application starting in development on http://localhost:3000
-    => Run `rails server -h` for more startup options
+    => Rails 7.0.3 application starting in development
+    => Run `bin/rails server --help` for more startup options
     Puma starting in single mode...
-    * Version {FUZZY}3.4.0{/FUZZY} (ruby 2.{FUZZY}2.2-p95{/FUZZY}), codename: {FUZZY}Owl Bowl Brawl{/FUZZY}
-    * Min threads: 5, max threads: 5
-    * Environment: development
-    * Listening on tcp://localhost:3000
+    * Puma version: 5.6.4 (ruby 3.0.3-p157) ("Birdie's Version")
+    *  Min threads: 5
+    *  Max threads: 5
+    *  Environment: development
+    *          PID: 65783
+    * Listening on http://127.0.0.1:3000
+    * Listening on http://[::1]:3000
     Use Ctrl-C to stop
   TEXT
 
@@ -59,9 +62,9 @@ step "Create a new Rails app" do
 
   tip "If it doesn't work, ask a TA for help."
   message "* In your browser, go to <http://localhost:3000>"
-  img src: "img/successful_rails_install.png", alt: "Screenshot of the browser on localhost 3000 showing the rails intro page"
+  img src: "img/successful_rails7_install.png", alt: "Screenshot of the browser on localhost 3000 showing the rails intro page"
   message <<-MARKDOWN
-
+    * Don't worry about the details version numbers. You should see ruby 3 and rails 7.
     * Back in the Terminal window where you ran <code>rails server</code>, type **Control-C** (don't type this into the console, but hold the Control and C keys at the same time) to kill(stop) the server. Windows will ask "Terminate batch job (Y/N)?".  Type "Y".
   MARKDOWN
 
@@ -95,7 +98,7 @@ step "Generate a database model" do
 
     (The window where you ran `rails server` will display debugging information as you do this.)
 
-    You should see: ![Screenshot of the drink detail page](img/get_a_sticker_you_should_see.png)
+    You should see: ![Screenshot of the drink detail page](img/drink-successfully-created-rails7.png)
 
     In your terminal, Hold Control and hit C (or on Windows, Control-Break, Y) to stop the rails server.
   MARKDOWN

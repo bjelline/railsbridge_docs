@@ -1,13 +1,7 @@
-step "Use git" do
+step "Commit to git" do
   tip "If your prompt doesn't already show that you are (still) in the test_app folder" do
     console "cd test_app"
   end
-
-  console <<-BASH
-    git init
-  BASH
-
-  result "Initialized empty Git repository in c:/Sites/railsbridge/test_app/.git/"
 
   console "git add -A"
   tip do
@@ -41,12 +35,11 @@ step "Deploy your app to Heroku" do
       Email: myemail@example.com
       Password:
       Uploading ssh public key /Users/smei/.ssh/id_rsa.pub
-      Creating floating-winter-18... done, stack is cedar
-      http://floating-winter-18.heroku.com/ | git@heroku.com:floating-winter-18.git
-      Git remote heroku added
+      Creating app... done, ⬢ true-poppy-74911
+      https://true-poppy-74911.herokuapp.com/ | https://git.heroku.com/true-poppy-74911.git
     OUTPUT
 
-    message "Heroku apps are automatically given lyrical names that look like '[adjective]-[noun]-[number]'.  Each name is different."
+    message "Heroku apps are automatically given lyrical names that look like '[adjective]-[noun]-[number]' like true-poppy-74911 in this example.  Each name is different, so your app will have a differnt name."
 
     console "git remote show"
     result "heroku"
@@ -61,18 +54,20 @@ step "Deploy your app to Heroku" do
       Inside this file, change the line:
     MARKDOWN
     source_code :ruby, <<-RUBY
-      gem 'sqlite3'
+      # Use sqlite3 as the database for Active Record
+      gem "sqlite3", "~> 1.4"
     RUBY
 
     message "To this:"
 
     source_code :ruby, <<-RUBY
+      # Use sqlite3 as the database in development and PostgreSQL in production
       group :development, :test do
         gem 'sqlite3'
       end
 
       group :production do
-        gem 'pg', '~> 0.18'
+        gem 'pg'
       end
     RUBY
 
@@ -92,7 +87,13 @@ step "Deploy your app to Heroku" do
       1 gem installed
     OUTPUT
 
-    console "bundle install --without production"
+    console "bundle lock --add-platform x86_64-linux --add-platform ruby"
+
+    fuzzy_result <<-OUTPUT
+      Fetching gem metadata from https://rubygems.org/..........
+      Resolving dependencies...
+      Writing lockfile to /Users/bjelline/railsbridge/test_app/Gemfile.lock
+    OUTPUT
 
     message "Again, wait for the console prompt, and look for the 'Bundle complete!' message just above."
   end
@@ -123,45 +124,42 @@ step "Deploy your app to Heroku" do
 
   step "Deploy (push) to heroku" do
 
-    console "git push heroku master"
+    console "git push heroku main"
 
     message "It may ask: \"The authenticity of host 'heroku.com (75.101.145.87)' can't be established. RSA key fingerprint is 8b:48:5e:67:0e:c9:16:47:32:f2:87:0c:1f:c8:60:ad. Are you sure you want to continue connecting (yes/no)?\" Type <code>yes</code> and hit *enter*."
 
-    result <<-OUTPUT
-      The authenticity of host 'heroku.com (75.101.145.87)' can't be established.
-      RSA key fingerprint is 8b:48:5e:67:0e:c9:16:47:32:f2:87:0c:1f:c8:60:ad.
-      Are you sure you want to continue connecting (yes/no)? yes
-      Warning: Permanently added 'heroku.com,75.101.145.87' (RSA) to the list of known hosts.
-      Counting objects: 60, done.
-      Compressing objects: 100% (54/54), done.
-      Writing objects: 100% (60/60), 79.03 KiB, done.
-      Total 60 (delta 10), reused 0 (delta 0)
-
-      -----> Heroku receiving push
-      -----> Rails app detected
-             Compiled slug size is 080K
-      -----> Launching...... done
-             App deployed to Heroku
-
-      To git@heroku.com:floating-winter-18.git
-       * [new branch]      master -> master
+    fuzzy_result <<-OUTPUT
+      remote: -----> Discovering process types
+      remote:        Procfile declares types     -> (none)
+      remote:        Default types for buildpack -> console, rake, web
+      remote:
+      remote: -----> Compressing...
+      remote:        Done: 37.3M
+      remote: -----> Launching...
+      remote:        Released v6
+      remote:        https://true-poppy-74911.herokuapp.com/ deployed to Heroku
+      remote:
+      remote: Verifying deploy... done.
+      To https://git.heroku.com/true-poppy-74911.git
+      * [new branch]      main -> main
     OUTPUT
 
-    important "Be sure to find and learn your Heroku application name in the output."
+    important "Be sure to find and learn your Heroku application name in the output. you can find it on the 6th line from the end in the example above: **URL** deployed to Heroku"
 
     message "This process will probably take about twice as long as your 'bundle install' and then will return you to your console prompt.  If it takes longer than that, talk to a TA."
 
     console "heroku run rails db:migrate"
 
     result <<-OUTPUT
-      Migrating to CreateDrinks (20160706063236)
-      ==  20160706063236 CreateDrinks: migrating =====================================
+      Running rails db:migrate on ⬢ true-poppy-74911... up, run.7760 (Free)
+      I, [2022-07-01T10:52:50.899913 #4]  INFO -- : Migrating to CreateDrinks (20220701102418)
+      == 20220701102418 CreateDrinks: migrating =====================================
       -- create_table(:drinks)
-         -> 0.0084s
-      ==  20160706063236 CreateDrinks: migrated (0.0085s) ============================
+        -> 0.0174s
+      == 20220701102418 CreateDrinks: migrated (0.0175s) ============================
     OUTPUT
 
-    message "The long number after CreateDrinks is a timestamp. Yours will be different!"
+    message "The long number before CreateDrinks is a timestamp. Yours will be different!"
   end
 
   step "Visit your new application" do
@@ -172,13 +170,27 @@ step "Deploy your app to Heroku" do
       console "heroku open"
     end
 
-    message "The URL for your app is <code>*application-name*.heroku.com</code> -- something like <code>floating-winter-18.heroku.com</code>."
+    message "The URL for your app is <code>*application-name*.heroku.com</code> -- in the example above it is <code>true-poppy-74911.herokuapp.com</code>."
 
     message "Verify you see the welcome page. Leave this browser window open."
 
     message "Create and save a new drink to verify you can write to the database on Heroku."
 
     message "If you want to see a little more info about your app, you can run `heroku info`."
+
+    result <<-OUTPUT
+      === true-poppy-74911
+      Addons:         heroku-postgresql:hobby-dev
+      Auto Cert Mgmt: false
+      Dynos:          web: 1
+      Git URL:        https://git.heroku.com/true-poppy-74911.git
+      Owner:          ....your email...
+      Region:         us
+      Repo Size:      34 KB
+      Slug Size:      37 MB
+      Stack:          heroku-20
+      Web URL:        https://true-poppy-74911.herokuapp.com/
+    OUTPUT
   end
 end
 
