@@ -5,11 +5,23 @@ end
 
 steps do
   step do
-    message "Make sure that you're in the `suggestotron` folder. You can type `pwd` (**p**rint **w**orking **d**irectory) in the terminal to see what folder you are in."
+    message "Make sure that you're in the `suggestotron` folder."
+    option_half "OSX/Linux" do
+      console "pwd"
+      message "`pwd` stands for print working directory."
+      message "It gives you the path of the folder you are in."
+    end
+    option_half "Windows" do
+      message "Look at the prompt in your terminal"
+      message "It should start with `C:\\railsbridge\\suggestotron`"
+    end
+  end
 
+  step do
+    message "Let's start the server"
     console "rails server"
     message "This will print some stuff and stay running forever, printing more stuff
-every time you visit a page in your app."
+every time you visit a page in your app.  This terminal is blocked now, you will need another terminal for other work."
   end
   step do
     text "Point your web browser to "
@@ -22,8 +34,10 @@ every time you visit a page in your app."
 will be ignored."
     message "To get back to the terminal, you can stop the server by typing
 `Control-c`."
-    result <<-STOPPING_RAILS_SERVER
-^CExiting
+    fuzzy_result <<-STOPPING_RAILS_SERVER
+      === puma shutdown: {FUZZY}2022-07-01 15:25:32 +0200{/FUZZY} ===
+      - Goodbye!
+      Exiting
     STOPPING_RAILS_SERVER
   end
 end

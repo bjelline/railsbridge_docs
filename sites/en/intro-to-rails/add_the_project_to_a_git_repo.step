@@ -1,31 +1,22 @@
 
 goals do
-  goal "Create a local git repository"
   goal "Add all our files to the git repository"
 
-  message "In order to publish our application, we need to add our application and any changes we make over time to a \"revision control system\". In our case we're going to use *git* because it is (relatively) easy and it is what our app server, *Heroku*, uses."
+  message "In order to publish our application, we need to add our application and any changes we make over time to a \"revision control system\". Rails already set up *git* for us."
 end
 
 steps do
 
   step do
-    console "git init"
-
-    message "It doesn't look like anything really happened, but `git init`
-initialized a new repository in a hidden directory called `.git`."
-    message "You can see this by typing `ls -a` (**l**i**s**t **a**ll files)."
-  end
-
-  step do
     console "git status"
 
     message "`git status` tells you everything git sees as modified, new, or missing."
-    message "You should see a ton of stuff under `Untracked files`."
+    message "You should see a ton of stuff in red under `Untracked files`."
   end
 
   step do
-    console "git add ."
-    message "`git add .` tells git that you want to add the current directory (aka `.`) and everything under it to the repo."
+    console "git add -A"
+    message "`git add -A` tells git that you want to add the current directory (aka `.`) and everything under it to the repo."
     tip "git add" do
       message <<-MARKDOWN
         With Git, there are usually many ways to do very similar things.
@@ -44,14 +35,14 @@ initialized a new repository in a hidden directory called `.git`."
   step do
     console "git status"
 
-    message "Now you should see a bunch of files listed under `Changes to be committed`."
+    message "Now you should see a bunch of files listed in green under `Changes to be committed`."
   end
 
   step do
-    console "git commit -m \"Added all the things\""
+    console "git commit -m \"empty Rail 7 app\""
     message "`git commit` tells git to actually _do_ all things you've said you wanted to do."
     message "This is done in two steps so you can group multiple changes together."
-    message "`-m \"Added all the things\"`  is just a shortcut to say what your commit message is. You can skip that part and git will bring up an editor to fill out a more detailed message."
+    message "the Text after `-m`  is a message to your future self or to other developers. Just a short description of what happened in this step."
   end
 
   step do
