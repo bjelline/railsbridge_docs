@@ -216,6 +216,15 @@ table.bordered tr {
   background-color: #C8A9E0;
 }
 
+.rails.console > pre {
+  border: 4px solid #BBB;
+  background-image: url(/img/rails-console.svg);
+  background-repeat: repeat-y;
+  background-position: 0px 10px;
+  padding-left: 110px;
+  line-height: 30px;
+}
+
 .console > pre {
   border: 4px solid #dde;
   -webkit-border-radius: 4px;
@@ -226,6 +235,8 @@ table.bordered tr {
   background-color: black;
   color: white;
 }
+
+
 
 .console {
   margin-top: 10px;
@@ -296,7 +307,7 @@ table.bordered tr {
 }
 
 .vertically-centered > *:first-child,
-.vertically-centered > *:first-child > *:first-child { 
+.vertically-centered > *:first-child > *:first-child {
   margin-top: 0;
 }
 

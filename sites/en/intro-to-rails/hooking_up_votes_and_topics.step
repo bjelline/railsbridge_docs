@@ -40,29 +40,57 @@ end
   step "Play around with Topics and Votes in the Rails console" do
     message "First, make sure you've made at least one topic on the site."
 
-    console_with_message "Next, open a Rails console in a terminal window:", "rails c"
+    console_with_message "Next, open a Rails console in a terminal window:", "rails console"
 
-    result <<-CONSOLE
+    fuzzy_result <<-CONSOLE
       $ rails console
-      Loading development environment (Rails 5.0.0)
-      2.3.0 :001 >
+      Loading development environment (Rails 7.{FUZZY}0.3{/FUZZY})
+      3.0{FUZZY}.3{/FUZZY} :{FUZZY}001{/FUZZY} >
     CONSOLE
+
+    tip "Are you typing into the terminal or are you typing into the rails console? This makes a big difference. You can always tell the two apart by the prompt"
 
     message "At the console, try the following things"
 
-    console_with_message "See how many topics exist:", "Topic.count"
+    rails_console_with_message "See how many topics exist:", "Topic.count"
 
-    console_with_message "Save the first topic into a variable:", "my_topic = Topic.first"
+    message <<-MARKDOWN
+      After typing in the code and pressing enter the rails console will look like this:
+
+      ![screenshot of the rails console showing three lines of text](img/reading-the-rails-console.png)
+
+      * On the first line you see
+        * the prompt ending in with a greater-than sign,  and after that
+        * the code you typed in
+      * on the second line, in blue, you can see
+        * the SQL Query that was sent to the database **SELECT COUNT(*) FROM "topics"**
+        * that it took 0.3ms to run that Query
+        * that it was run to compute the Topic count
+      * on the third line you see
+        * a "fat arrow" =&gt;
+        * and after that the result: there is just one topic in this database
+
+      Most of the time you are only intrested in the last line with the result.
+    MARKDOWN
+
+    rails_console_with_message "Save the first topic into a variable:", "my_topic = Topic.first"
+
 
     tip "`my_topic` here could have been any variable name, but we'll stick with `my_topic` for consistency."
 
-    console_with_message "Change the title of that topic to something else:", "my_topic.update_attributes(title: 'Edited in the console')"
+    rails_console_with_message "Change the title of that topic to something else:", "my_topic.update(title: 'Edited in the console')"
 
-    console_with_message "Add a vote to that topic:", "my_topic.votes.create"
+    message <<-MARKDOWN
+      Reload the page in the browser and you will see the change:
 
-    console_with_message "See how many votes that topic has:", "my_topic.votes.count"
+      ![screenshot of the web app in the browser showing new title](img/edited-at-the-console.png)
 
-    console_with_message "Remove a vote from that topic:", "my_topic.votes.first.destroy"
+    MARKDOWN
+    rails_console_with_message "Add a vote to that topic:", "my_topic.votes.create"
+
+    rails_console_with_message "See how many votes that topic has:", "my_topic.votes.count"
+
+    rails_console_with_message "Remove a vote from that topic:", "my_topic.votes.first.destroy"
 
     message "Note that the things you can do to **Model classes** (like **Topic** and **Vote**), differ from the things you can do to **Model instances** (like my\\_topic, here). **my\\_topic.votes** is an **association**, and here behaves mostly like a model class."
 

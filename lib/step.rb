@@ -74,7 +74,7 @@ class Step < Erector::Widget
   ## steps
 
   %w[
-    steps explanation overview discussion hints challenge 
+    steps explanation overview discussion hints challenge
     tools_and_references requirements
   ].each do |type|
     define_method type.to_sym do |&block|
@@ -234,6 +234,21 @@ class Step < Erector::Widget
   end
 
   ## special
+
+  def rail_console(commands)
+    rails_console_with_message(I18n.t('captions.terminal'), commands)
+  end
+
+  def rails_console_with_message(message, commands)
+    div :class => "rails console" do
+      span message
+      pre commands.strip_heredoc
+    end
+  end
+
+  def console_without_message(commands)
+    rails_console_with_message("", commands)
+  end
 
   def console(commands)
     console_with_message(I18n.t('captions.terminal'), commands)
