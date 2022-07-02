@@ -1,43 +1,84 @@
 step "Create a Heroku application" do
   console "heroku create"
   message "`heroku create` registers a new application on Heroku's system. You should see some output including your new app's URL."
+
+  console "git remote show"
+  result "heroku"
 end
 
-step "Edit the Gemfile" do
-  important "Each application has its own `Gemfile`. Be sure you're opening the one inside your app's folder."
+step "Configure the PostgreSQL database for heroku" do
 
-  message "Heroku will run our application slightly differently than our development computer does, which requires us to make a small change to our `Gemfile`."
+  tip "Why Sqlite (sqlite3) and PostgreSQL (pg)?" do
+    message "SQLite and PostgreSQL are different kinds of databases.  We're using SQLite for our development and test environments because it's simple to install.  We're using PostgreSQL in our production environment because Heroku has done the hard work of installing it for us and it's more powerful than SQLite. We have separate test, development and production databases by default in Rails."
+  end
 
-  message "Open the file called `Gemfile` in your editor, and find the line containing:"
+  message "Open the `Gemfile` in your editor, and find the line containing:"
 
   source_code :ruby, <<-RUBY
-gem 'sqlite3'
+  # Use sqlite3 as the database for Active Record
+  gem "sqlite3", "~> 1.4"
   RUBY
 
   message "**Remove that line** and replace it with:"
 
   source_code :ruby, <<-RUBY
-group :development, :test do
-  gem 'sqlite3'
-end
+  # Use sqlite3 as the database in development and PostgreSQL in production
+  group :development, :test do
+    gem 'sqlite3'
+  end
 
-group :production do
-  gem 'pg', '~> 0.18'
-end
+  group :production do
+    gem 'pg'
+  end
   RUBY
+
+
+  message "Save the file."
+
+  message <<-MARKDOWN
+    Open the `database.yml` file located inside the `config` folder.
+
+    Inside this file, find the last part after "production" and change it:
+  MARKDOWN
+  source_code :ruby, <<-RUBY
+    production:
+      <<: *default
+      database: db/production.sqlite3
+  RUBY
+
+  message "To this:"
+
+  source_code :ruby, <<-RUBY
+    production:
+      adapter: postgresql
+      encoding: unicode
+      pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+      url: <%= ENV["MY_APP_DATABASE_URL"] %>
+  RUBY
+
+  message "Save the file."
 end
 
-step "Apply the Gemfile changes" do
+step "After changing the Gemfile always run bundle" do
   console "bundle install --without production"
+
+  fuzzy_result <<-OUTPUT
+...
+Bundle complete! {FUZZY}6{/FUZZY} Gemfile dependencies, {FUZZY}54{/FUZZY} gems now installed.
+Gems in the group 'production' were not installed.
+Use `bundle info [gemname]` to see where a bundled gem is installed.
+  OUTPUT
+
   message "Every time the `Gemfile` changes, you need to run ``bundle install`` for the changes to be processed. The processed version of the changes is stored in another file called ``Gemfile.lock``."
   message "Here we are bundling without the gems in the group ``production``."
 end
 
-step "Commit the Gemfile changes" do
-  message "There are now changes to `Gemfile` and `Gemfile.lock` that need to be committed before we can push to Heroku."
-  console <<-SHELL
-git add .
-git commit -m "Changed Gemfile for Heroku"
-  SHELL
-  tip "There is a period after the word add in the first line."
+step "Prepare the Gemfile for deploying to a UNIX Server" do
+  console "bundle lock --add-platform x86_64-linux --add-platform ruby"
+  fuzzy_result <<-OUTPUT
+    Fetching gem metadata from https://rubygems.org/..........
+    Resolving dependencies...
+    Writing lockfile to /Users/bjelline/railsbridge/suggestotron/Gemfile.lock
+  OUTPUT
 end
+

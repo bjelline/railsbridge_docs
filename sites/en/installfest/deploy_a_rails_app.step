@@ -23,175 +23,204 @@ step "Commit to git" do
   result "(Your git name and \"initial commit\" message.)"
 end
 
-step "Deploy your app to Heroku" do
 
-  step "Create a Heroku application from this local Rails application." do
+step "Create a Heroku application" do
 
-    message "The very first time you use `heroku` you must enter your Heroku email address and password. Your password may not be shown as you type it, but don't worry, it's being entered! If you have already provided your credentials before, you won't be prompted for them again."
+  message "The very first time you use `heroku` you must enter your Heroku email address and password. Your password may not be shown as you type it, but don't worry, it's being entered! If you have already provided your credentials before, you won't be prompted for them again."
 
-    console "heroku create"
-    result <<-OUTPUT
-      Enter your Heroku credentials.
-      Email: myemail@example.com
-      Password:
-      Uploading ssh public key /Users/smei/.ssh/id_rsa.pub
-      Creating app... done, ⬢ true-poppy-74911
-      https://true-poppy-74911.herokuapp.com/ | https://git.heroku.com/true-poppy-74911.git
-    OUTPUT
+  console "heroku create"
+  result <<-OUTPUT
+    Enter your Heroku credentials.
+    Email: myemail@example.com
+    Password:
+    Uploading ssh public key /Users/smei/.ssh/id_rsa.pub
+    Creating app... done, ⬢ true-poppy-74911
+    https://true-poppy-74911.herokuapp.com/ | https://git.heroku.com/true-poppy-74911.git
+  OUTPUT
 
-    message "Heroku apps are automatically given lyrical names that look like '[adjective]-[noun]-[number]' like true-poppy-74911 in this example.  Each name is different, so your app will have a differnt name."
+  message "Heroku apps are automatically given lyrical names that look like '[adjective]-[noun]-[number]' like true-poppy-74911 in this example.  Each name is different, so your app will have a differnt name."
 
-    console "git remote show"
-    result "heroku"
+  console "git remote show"
+  result "heroku"
 
-    message "If you get messages here complaining about public keys it's probably due to some confusion with SSH key usage by another app on your computer.  Call a volunteer over to help you figure it out.  Luckily this only needs to be done the first time you create a Heroku app."
-  end
+  message "If you get messages here complaining about public keys it's probably due to some confusion with SSH key usage by another app on your computer.  Call a volunteer over to help you figure it out.  Luckily this only needs to be done the first time you create a Heroku app."
+end
 
-  step "Prepare your rails app for deploying to Heroku" do
-    message <<-MARKDOWN
-      Launch your text editor and open the "Gemfile" file located inside of your test_app folder. (On Windows, this should be in `C:\\Sites\\railsbridge\\test_app` and on Linux/OS X, it should be under `~/railsbridge/test_app`.)
+step "Configure the PostgreSQL database for heroku" do
+  message <<-MARKDOWN
+    Launch your text editor and open the "Gemfile" file located inside of your test_app folder. (On Windows, this should be in `C:\\Sites\\railsbridge\\test_app` and on Linux/OS X, it should be under `~/railsbridge/test_app`.)
 
-      Inside this file, change the line:
-    MARKDOWN
-    source_code :ruby, <<-RUBY
-      # Use sqlite3 as the database for Active Record
-      gem "sqlite3", "~> 1.4"
-    RUBY
+    Inside this file, change the line:
+  MARKDOWN
+  source_code :ruby, <<-RUBY
+    # Use sqlite3 as the database for Active Record
+    gem "sqlite3", "~> 1.4"
+  RUBY
 
-    message "To this:"
+  message "To this:"
 
-    source_code :ruby, <<-RUBY
-      # Use sqlite3 as the database in development and PostgreSQL in production
-      group :development, :test do
-        gem 'sqlite3'
-      end
-
-      group :production do
-        gem 'pg'
-      end
-    RUBY
-
-    message "Save the file."
-
-    tip do
-      message 'When you saved the file, your text editor may have added colors to the code, much like the example above.  It recognizes the file contains Ruby, and will mark up different kinds of words with different colors. This is called "syntax highlighting", which makes it easier to read code.'
-    end
-    tip "Why Sqlite (sqlite3) and PostgreSQL (pg)?" do
-      message "SQLite and PostgreSQL are different kinds of databases.  We're using SQLite for our development and test environments because it's simple to install.  We're using PostgreSQL in our production environment because Heroku has done the hard work of installing it for us and it's more powerful than SQLite. We have separate test, development and production databases by default in Rails."
+  source_code :ruby, <<-RUBY
+    # Use sqlite3 as the database in development and PostgreSQL in production
+    group :development, :test do
+      gem 'sqlite3'
     end
 
-    console "gem install bundler"
-
-    fuzzy_result <<-OUTPUT
-      Successfully installed bundler-{FUZZY}1.14.3{/FUZZY}
-      1 gem installed
-    OUTPUT
-
-    console "bundle lock --add-platform x86_64-linux --add-platform ruby"
-
-    fuzzy_result <<-OUTPUT
-      Fetching gem metadata from https://rubygems.org/..........
-      Resolving dependencies...
-      Writing lockfile to /Users/bjelline/railsbridge/test_app/Gemfile.lock
-    OUTPUT
-
-    message "Again, wait for the console prompt, and look for the 'Bundle complete!' message just above."
-  end
-
-  step "Set the root route" do
-    message "Use your editor to open the file routes.rb  (`C:\\sites\\railsbridge\\test_app\\config\\routes.rb` or `~/railsbridge/test_app/config/routes.rb`) and find the line containing:"
-
-    source_code :ruby, <<-RUBY
-      Rails.application.routes.draw do
-    RUBY
-
-    message "After this line, add a new line with the following:"
-
-    source_code :ruby, <<-RUBY
-      root 'drinks#index'
-    RUBY
-
-    message "Save the file."
-  end
-
-  step "Add the changes to git" do
-
-    message "Before running the following command (to add to your local git repository), make sure that you are in the `test_app` directory."
-
-    console 'git add .'
-    console 'git commit -m "Updates for heroku deployment"'
-  end
-
-  step "Deploy (push) to heroku" do
-
-    console "git push heroku main"
-
-    message "It may ask: \"The authenticity of host 'heroku.com (75.101.145.87)' can't be established. RSA key fingerprint is 8b:48:5e:67:0e:c9:16:47:32:f2:87:0c:1f:c8:60:ad. Are you sure you want to continue connecting (yes/no)?\" Type <code>yes</code> and hit *enter*."
-
-    fuzzy_result <<-OUTPUT
-      remote: -----> Discovering process types
-      remote:        Procfile declares types     -> (none)
-      remote:        Default types for buildpack -> console, rake, web
-      remote:
-      remote: -----> Compressing...
-      remote:        Done: 37.3M
-      remote: -----> Launching...
-      remote:        Released v6
-      remote:        https://true-poppy-74911.herokuapp.com/ deployed to Heroku
-      remote:
-      remote: Verifying deploy... done.
-      To https://git.heroku.com/true-poppy-74911.git
-      * [new branch]      main -> main
-    OUTPUT
-
-    important "Be sure to find and learn your Heroku application name in the output. you can find it on the 6th line from the end in the example above: **URL** deployed to Heroku"
-
-    message "This process will probably take about twice as long as your 'bundle install' and then will return you to your console prompt.  If it takes longer than that, talk to a TA."
-
-    console "heroku run rails db:migrate"
-
-    result <<-OUTPUT
-      Running rails db:migrate on ⬢ true-poppy-74911... up, run.7760 (Free)
-      I, [2022-07-01T10:52:50.899913 #4]  INFO -- : Migrating to CreateDrinks (20220701102418)
-      == 20220701102418 CreateDrinks: migrating =====================================
-      -- create_table(:drinks)
-        -> 0.0174s
-      == 20220701102418 CreateDrinks: migrated (0.0175s) ============================
-    OUTPUT
-
-    message "The long number before CreateDrinks is a timestamp. Yours will be different!"
-  end
-
-  step "Visit your new application" do
-
-    message "Now that the app is deployed, you can visit it in a browser."
-
-    tip "To quickly open your heroku application in a browser" do
-      console "heroku open"
+    group :production do
+      gem 'pg'
     end
+  RUBY
 
-    message "The URL for your app is <code>*application-name*.heroku.com</code> -- in the example above it is <code>true-poppy-74911.herokuapp.com</code>."
+  message "Save the file."
 
-    message "Verify you see the welcome page. Leave this browser window open."
+  tip do
+    message 'When you saved the file, your text editor may have added colors to the code, much like the example above.  It recognizes the file contains Ruby, and will mark up different kinds of words with different colors. This is called "syntax highlighting", which makes it easier to read code.'
+  end
 
-    message "Create and save a new drink to verify you can write to the database on Heroku."
 
-    message "If you want to see a little more info about your app, you can run `heroku info`."
+  message <<-MARKDOWN
+    Launch your text editor and open the "database.yml" file located inside the config folder.
 
-    result <<-OUTPUT
-      === true-poppy-74911
-      Addons:         heroku-postgresql:hobby-dev
-      Auto Cert Mgmt: false
-      Dynos:          web: 1
-      Git URL:        https://git.heroku.com/true-poppy-74911.git
-      Owner:          ....your email...
-      Region:         us
-      Repo Size:      34 KB
-      Slug Size:      37 MB
-      Stack:          heroku-20
-      Web URL:        https://true-poppy-74911.herokuapp.com/
-    OUTPUT
+    Inside this file, find the last part after "production" and change it:
+  MARKDOWN
+  source_code :ruby, <<-RUBY
+    production:
+      <<: *default
+      database: db/production.sqlite3
+  RUBY
+
+  message "To this:"
+
+  source_code :ruby, <<-RUBY
+    production:
+      adapter: postgresql
+      encoding: unicode
+      pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+      url: <%= ENV["MY_APP_DATABASE_URL"] %>
+  RUBY
+
+  message "Save the file."
+
+  tip "Why Sqlite (sqlite3) and PostgreSQL (pg)?" do
+    message "SQLite and PostgreSQL are different kinds of databases.  We're using SQLite for our development and test environments because it's simple to install.  We're using PostgreSQL in our production environment because Heroku has done the hard work of installing it for us and it's more powerful than SQLite. We have separate test, development and production databases by default in Rails."
   end
 end
+
+step "Prepare the Gemfile for deploying to a UNIX Server" do
+
+  console "bundle install --without production"
+
+  fuzzy_result <<-OUTPUT
+...
+Bundle complete! {FUZZY}6{/FUZZY} Gemfile dependencies, {FUZZY}54{/FUZZY} gems now installed.
+Gems in the group 'production' were not installed.
+Use `bundle info [gemname]` to see where a bundled gem is installed.
+  OUTPUT
+
+  console "bundle lock --add-platform x86_64-linux --add-platform ruby"
+
+  fuzzy_result <<-OUTPUT
+    Fetching gem metadata from https://rubygems.org/..........
+    Resolving dependencies...
+    Writing lockfile to {FUZZY}...{/FUZZY}railsbridge/test_app/Gemfile.lock
+  OUTPUT
+
+  message "Again, wait for the console prompt, and look for the 'Bundle complete!' message just above."
+end
+
+step "Set the root route" do
+  message "Use your editor to open the file routes.rb  (`C:\\sites\\railsbridge\\test_app\\config\\routes.rb` or `~/railsbridge/test_app/config/routes.rb`) and find the line containing:"
+
+  source_code :ruby, <<-RUBY
+    Rails.application.routes.draw do
+  RUBY
+
+  message "After this line, add a new line with the following:"
+
+  source_code :ruby, <<-RUBY
+    root 'drinks#index'
+  RUBY
+
+  message "Save the file."
+end
+
+step "Add the changes to git" do
+
+  message "Before running the following command (to add to your local git repository), make sure that you are in the `test_app` directory."
+
+  console 'git add .'
+  console 'git commit -m "Updates for heroku deployment"'
+end
+
+step "Deploy (push) to heroku" do
+
+  console "git push heroku main"
+
+  message "It may ask: \"The authenticity of host 'heroku.com (75.101.145.87)' can't be established. RSA key fingerprint is 8b:48:5e:67:0e:c9:16:47:32:f2:87:0c:1f:c8:60:ad. Are you sure you want to continue connecting (yes/no)?\" Type <code>yes</code> and hit *enter*."
+
+  fuzzy_result <<-OUTPUT
+    remote: -----> Discovering process types
+    remote:        Procfile declares types     -> (none)
+    remote:        Default types for buildpack -> console, rake, web
+    remote:
+    remote: -----> Compressing...
+    remote:        Done: {FUZZY}37.3M{/FUZZY}
+    remote: -----> Launching...
+    remote:        Released v6
+    remote:        https://{FUZZY}true-poppy-74911{/FUZZY}.herokuapp.com/ deployed to Heroku
+    remote:
+    remote: Verifying deploy... done.
+    To https://git.heroku.com/{FUZZY}true-poppy-74911{/FUZZY}.git
+    * [new branch]      main -> main
+  OUTPUT
+
+  important "Be sure to find and learn your Heroku application name in the output. you can find it on the 6th line from the end in the example above: **URL** deployed to Heroku"
+
+  message "This process will probably take about twice as long as your 'bundle install' and then will return you to your console prompt.  If it takes longer than that, talk to a TA."
+
+  console "heroku run rails db:migrate"
+
+  fuzzy_result <<-OUTPUT
+    Running rails db:migrate on ⬢ {/UZZY}true-poppy-74911{/FUZZY}... up, run.7760 (Free)
+    I, [{FUZZY}2022-07-01T10:52:50.899913 #4{/FUZZY}]  INFO -- : Migrating to CreateDrinks (20220701102418)
+    == {FUZZY}20220701102418{/FUZZY} CreateDrinks: migrating =====================================
+    -- create_table(:drinks)
+      -> {FUZZY}0.0174s{/FUZZY}
+    == {FUZZY}20220701102418{/FUZZY} CreateDrinks: migrated ({FUZZY}0.0175s{/FUZZY}) ============================
+  OUTPUT
+
+  message "The long number before CreateDrinks is a timestamp. Yours will be different!"
+end
+
+step "Visit your new application" do
+
+  message "Now that the app is deployed, you can visit it in a browser."
+
+  tip "To quickly open your heroku application in a browser" do
+    console "heroku open"
+  end
+
+  message "The URL for your app is <code>*application-name*.heroku.com</code> -- in the example above it is <code>true-poppy-74911.herokuapp.com</code>."
+
+  message "Verify you see the welcome page. Leave this browser window open."
+
+  message "Create and save a new drink to verify you can write to the database on Heroku."
+
+  message "If you want to see a little more info about your app, you can run `heroku info`."
+
+  fuzzy_result <<-OUTPUT
+    === {FUZZY}true-poppy-74911{/FUZZY}
+    Addons:         heroku-postgresql:hobby-dev
+    Auto Cert Mgmt: false
+    Dynos:          web: 1
+    Git URL:        https://git.heroku.com/{FUZZY}true-poppy-74911{/FUZZY}.git
+    Owner:          ....your email...
+    Region:         us
+    Repo Size:      {FUZZY}34{/FUZZY} KB
+    Slug Size:      {FUZZY}37{/FUZZY} MB
+    Stack:          heroku-{FUZZY}20{/FUZZY}
+    Web URL:        https://{FUZZY}true-poppy-74911{/FUZZY}.herokuapp.com/
+  OUTPUT
+end
+
 
 next_step "get_a_sticker"
