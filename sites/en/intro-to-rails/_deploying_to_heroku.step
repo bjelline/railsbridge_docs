@@ -53,7 +53,7 @@ step "Configure the PostgreSQL database for heroku" do
       adapter: postgresql
       encoding: unicode
       pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-      url: <%= ENV["MY_APP_DATABASE_URL"] %>
+      url: <%= ENV["DATABASE_URL"] %>
   RUBY
 
   message "Save the file."
