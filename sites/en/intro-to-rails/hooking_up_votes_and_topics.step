@@ -29,7 +29,7 @@ end
   end
 
   step "Teach the Vote model about Topics" do
-    message "Edit `app/models/vote.rb` so that it looks like this:"
+    message "Look into `app/models/vote.rb` and confirm that it looks like this:"
     source_code :ruby, <<-RUBY
 class Vote < ApplicationRecord
   belongs_to :topic
@@ -43,7 +43,7 @@ end
     console_with_message "Next, open a Rails console in a terminal window:", "rails c"
 
     result <<-CONSOLE
-      $ rails c
+      $ rails console
       Loading development environment (Rails 5.0.0)
       2.3.0 :001 >
     CONSOLE

@@ -2,14 +2,27 @@
 goals {
   goal "Create a model for votes"
 
-  model_diagram header: 'Votes', fields: %w(id topic_id)
+  div(style: 'margin: 0 auto; width: 250px; height: 120px;') do
+    model_diagram header: 'Topics', fields: %w(id title description), style: "float: left;"
+    div(style: 'float: left; position: relative; width: 60px; height: 100px;') do
+      div(class: 'arrow-left', style: 'left: 0;  top: 30px;')
+      div(class: 'horiz-line', style: 'left: 5px;  top: 37px; width: 25px;')
+      div(class: 'vert-line', style: 'left: 30px; top: 38px; height: 25px;')
+      div(class: 'horiz-line', style: 'right: 0; top: 62px; width: 30px;')
+    end
+    model_diagram header: 'Votes', fields: %w(id topic_id), style: "float: left;"
+  end
 
-  message "Every topic in suggestotron can be voted on. In order to count votes, we need to record votes. We'll add that table now."
+  message <<-MARKDOWN
+    Every topic in suggestotron can be voted on.
+    In order to count votes, we need to record votes in the database.
+    We'll add the new table for votes now.
+  MARKDOWN
 }
 
 steps {
   console <<-SHELL
-rails generate model vote topic_id:integer
+rails generate model vote references:topic
 rails db:migrate
   SHELL
 }
@@ -17,8 +30,7 @@ rails db:migrate
 explanation {
   message <<-MARKDOWN
   * Just like before, we're creating a new model named "vote"
-  * The only thing really different is the integer we added called `topic_id`.
-    * `topic_id` is the data we need to draw the line between votes and topics.
+  * `votes` contains just one thing: a reference to the topic it belongs to
   * We didn't generate a full scaffold this time because we aren't
     going to do the full CRUD for votes; they're just going to be
     considered part of topics as-is.
