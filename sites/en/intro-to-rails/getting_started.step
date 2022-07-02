@@ -41,7 +41,7 @@ steps do
   end
 
   step do
-    console "rails new suggestotron  -d sqlite3"
+    console "rails new suggestotron  -d sqlite3 --minimal"
     message "`rails new` creates a new Rails project with the name you give."
     message "In this case we told it to create a new project called `suggestotron`. We'll go into detail on what it created shortly."
     message "This will print a lot of stuff to the screen and can take a while to finish."
