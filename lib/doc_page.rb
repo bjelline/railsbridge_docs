@@ -69,7 +69,7 @@ class DocPage < Html5Page
 
       div(class: "navbar-header cf title") {
         a(href: "/#{site.name}") {
-          span("RailsBridge ", class: "brand")
+          span("Salzburg RailsBridge: ", class: "brand")
           text site_title
         }
       }

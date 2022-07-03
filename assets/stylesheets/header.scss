@@ -1,4 +1,4 @@
-$railsbridge_purple: #6c266f;
+$railsbridge_purple: #3cd1ee; /*  original is #6c266f; */
 $railsbridge_blue: #2493b8;
 $railsbridge_darkerblue: #428bca;
 
@@ -157,7 +157,7 @@ nav *, nav *:before, nav *:after {
   margin-bottom: 20px;
   border: 0;
   background-color: $railsbridge_purple;
-  background-image: url("/img/navbar_texture.gif");
+  /* background-image: url("/img/navbar_texture.gif"); */
   border-bottom-width: 12px;
   border-bottom-color: $railsbridge_blue;
   border-bottom-style: solid;
