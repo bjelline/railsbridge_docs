@@ -57,7 +57,7 @@ end
     message <<-MARKDOWN
       After typing in the code and pressing enter the rails console will look like this:
 
-      ![screenshot of the rails console showing three lines of text](img/reading-the-rails-console.png)
+      ![screenshot of the rails console showing three lines of textA](img/reading-the-rails-console.png)
 
       * On the first line you see
         * the prompt ending in with a greater-than sign,  and after that

@@ -1,41 +1,66 @@
 goals {
 
-  message "Our app is nearly done! The main topics listing page is pretty busy. There are a lot of links that aren't necessary."
+  message "Our app is nearly done! But the main topics listing page is still pretty busy, and does not look like a list at all."
 
   message "Let's clean up the topics list page by doing the following:"
 
-  goal "Remove the 'show' link"
-  goal "Remove the 'edit' link"
-  goal "Change 'destroy' to 'delete'"
+  goal "Remove the 'Show this topic' link"
+  goal "Turn it into a real list"
 }
 
 steps {
-  step "Remove the 'show' and 'edit' links" do
+  step "Remove the 'Show this topic' links" do
     message "Open `app/views/topics/index.html.erb` and remove these two lines:"
-    source_code :erb, <<-HTML
-<td><%= link_to 'Show', topic %></td>
-<td><%= link_to 'Edit', edit_topic_path(topic) %></td>
-    HTML
+    source_code :erb, <<-ERB
+    <p>
+      <%= link_to "Show this topic", topic %>
+    </p>
+    ERB
   end
 
-  step "Change 'destroy' to 'delete'" do
+  step "Turn it into a real list" do
+    message "Instead of a sequence of `<div>`s create a real list. Open `app/views/topics/index.html.erb` and replace everything inside from `<div id=\"topics\">` to the last `</div>`:"
+    source_code :erb, <<-ERB
+      <ul id="topics">
+        <% @topics.each do |topic| %>
+          <li id="<%= dom_id topic %>">
+              <%= link_to topic.title, topic %>
+              <%= pluralize(topic.votes.count, "vote") %>
+              <%= button_to '+1', upvote_topic_path(topic), method: :post %>
+          </li>
+        <% end %>
+      </ul>
+    ERB
 
-    message "Change the line with the word 'Destroy' to this:"
-    source_code :erb, "<td><%= link_to 'Delete', topic, method: :delete, data: { confirm: 'Are you sure?' } %></td>"
+    message "Reload the page in the browser to see the changes. You should see a list now. But the voting-buttons still appear on a line by themselves"
+  end
+
+  step "Add some CSS to get the button in line" do
+    message "Create a new file `app/assets/stylesheets/topics.css` and save the following code to it:"
+    source_code :css, <<-ERB
+      ul#topics form {
+        display: inline;
+      }
+    ERB
   end
 
   step "Confirm your changes" do
+    message <<-MARKDOWN
+      Now save your file and try reloading in your browser to see the changes.
 
-    message "Now save your file and try reloading in your browser to see the changes."
+      The topic listing page should now look something like this:
+
+      ![](img/topic_list_as_list.png)
+
+    MARKDOWN
   end
 }
 
 
 explanation {
   message <<-MARKDOWN
-  * The two links we removed were show and edit.  We did this because the title now links to the show page and from the show page you can reach the edit page.
-
-  * The second change we made was to make the link text 'Delete' instead of 'Destroy'.
+  * We removed the "Show this topic" link because we have the title as a link to the same page now
+  * We used the HTML Tags `<ul>` and `<li>` to display a list
   MARKDOWN
 }
 

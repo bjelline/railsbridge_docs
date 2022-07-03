@@ -1,22 +1,39 @@
 goals {
-  message "Your friends recommended two changes for the site:"
+  message "Usability testing (= some friends trying out the app) found that the front page is too cluttered and should look more like a list´:"
   goal "Don't show the description on the list page"
-  goal "Make the title a link and when it's clicked show the description"
+  goal "Make the title a link and only when it's clicked show all the details like the description"
 }
 
 steps {
 
+  step("Replace the partial in the index view.") {
+
+    message "Right now the  `_topic` partial is used on the index page and on the show page.  If we want to have two different ways of displaying a topic we need split this apart.  find the line in `app/views/topcis/index.html.erb`"
+
+    source_code :erb, "<%= render @topic %>"
+
+    message "and replace this line with all the code you find in the partial `app/views/topcis/_topic.html.erb`"
+
+    message "Reload the index page in the browser to check that the app still looks the same as before in the browser."
+
+    tip "What you just did is called 'refactoring': you changed how the code is written, but did not change what the code does."
+
+  }
+
 
   step("Remove the description") {
 
-    message "Let's start by removing the description. Open `app/views/topics/index.html.erb` and delete the line that looks like this:"
+    message "Let's start by removing the description. Open `app/views/topics/index.html.erb` and delete the lines that looks like this:"
 
-    source_code :erb, "<td><%= topic.description %></td>"
+    source_code :erb, <<-ERB
+      <p>
+        <strong>Description:</strong>
+        <%= topic.description %>
+      </p>
+    ERB
 
-    message "Also delete the line that looks like this:"
-  source_code :erb, "<th>Description</th>"
 
-    message "If you save and try to load it in the browser you should see that the description no longer appears."
+    message "If you save and try to load it in the browser you should see that the description no longer appears on the index page but is still shown when you click on 'show this topic'."
 
   }
 
@@ -24,11 +41,11 @@ steps {
 
     message "Now make the title a link by editing `app/views/topics/index.html.erb` (again) and replacing this line:"
 
-    source_code :erb, "<td><%= topic.title %></td>"
+    source_code :erb, "<%= topic.title %>"
 
     message "with this:"
 
-    source_code :erb, "<td><%= link_to topic.title, topic %></td>"
+    source_code :erb, "<%= link_to topic.title, topic %>"
   }
 }
 

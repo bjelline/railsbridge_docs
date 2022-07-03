@@ -16,8 +16,9 @@ steps {
     RUBY
 
     message <<-MARKDOWN
+      * `params[:id]` reads a parameter called `id` from the URL or from data sent via a form
       * `@topic = Topic.find(params[:id])` finds the topic in the database with that id and stores it in the variable `@topic`.
-      * `@topic.votes.create` creates a new vote for the current topic and saves it in the database.
+      * `@topic.votes.create` creates a new vote for this topic and saves it in the database.
       * `redirect_to(topics_path)` tells the browser to go back to `topics_path` (the topics list).
     MARKDOWN
   end
@@ -44,33 +45,30 @@ steps {
             Prefix Verb   URI Pattern                  Controller#Action
       upvote_topic POST   /topics/:id/upvote(.:format) topics#upvote
       ```
+
+      We are using POST instead of the more common GET, because we want to change something on the server.
     MARKDOWN
   end
 
   step "Add the button to the view" do
 
-    message "Edit `app/views/topics/index.html.erb` so that the bottom loop looks like this:"
+    message "Edit `app/views/topics/_topic.html.erb`: replace the closing `</div>` so that end of the file looks like this:"
 
     source_code :erb, <<-HTML
-      <% @topics.each do |topic| %>
-        <tr>
-          <td><%= topic.title %></td>
-          <td><%= topic.description %></td>
-          <td><%= pluralize(topic.votes.count, "vote") %></td>
-          <td><%= button_to '+1', upvote_topic_path(topic), method: :post %></td>
-          <td><%= link_to 'Show', topic %></td>
-          <td><%= link_to 'Edit', edit_topic_path(topic) %></td>
-          <td><%= link_to 'Destroy', topic, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-        </tr>
-      <% end %>
+        <p>
+          <strong>Votes:</strong>
+          <%= pluralize(topic.votes.count, "vote") %>
+          <%= button_to '+1', upvote_topic_path(topic), method: :post %>
+        </p>
+
+      </div>
     HTML
 
     message <<-MARKDOWN
       * `pluralize(topic.votes.count, "vote")` displays the number of votes the topic has, plus the word "vote" or "votes" accordingly.
-      * `button_to '+1'` creates an HTML button with the text "+1".
-      * `upvote_topic_path(topic)` creates the appropriate URL for the action we want to invoke. In this case, we want to upvote the current topic.
-        * `upvote_topic_path(topic)` would return `/topics/42/upvote` (if topic.id was 42)
-      * `method: :post` ensures we do the create action of CRUD, not the read action.
+      * `button_to '+1'` creates an HTML button with the text "+1" and the following properties:
+        * `upvote_topic_path(topic)` creates the appropriate URL for the action we want to invoke. For the topic with id 42 this would be   `/topics/42/upvote`
+        * `method: :post` to fit with the route we specified before.
     MARKDOWN
   end
 

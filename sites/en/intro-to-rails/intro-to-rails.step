@@ -6,13 +6,13 @@ example. You've decided to create a voting system for you and your
 friends to play with. You've decided at a minimum, you'd like to
 allow users to:
 
-* view the topics sorted by number of votes
+* view the topics
 * vote on topics
 * create, edit, and destroy topics
 
 You've sketched up an initial screenshot of what you want it to look like:
 
-![Browser window with topic titles that can be voted on, ordered by number of votes](img/finished_app.png)
+![Browser window with topic titles that can be voted on](img/topic_list_as_list.png)
 
 ### Meta-Goal
 
@@ -23,7 +23,7 @@ application online you should understand:
 * How to try your Ruby code (IRB)
 * How to go from requirements to a new working Rails application
 * How to get your application online
-* The basic tools a RoR (Ruby on Rails) developer uses (source control, editor, console, local server)
+* The basic tools a RoR (Ruby on Rails) developer uses (source control, editor, rails console, local server)
 
 ### Schedule
 
@@ -38,8 +38,8 @@ day. Probably.
 
 We're going to be working with:
 
-* Ruby 3.0 or greater installed via RVM (Mac or Linux) or RailsInstaller (Windows)
-* Rails 7.0.x
+* Ruby 3.0 or greater
+* Rails 7.x.x  (the last two numbers are not important)
 * Bundler
 * SQLite
 * The text editor of your choice
