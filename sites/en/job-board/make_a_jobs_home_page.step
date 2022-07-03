@@ -95,7 +95,7 @@ RUBY
 
 message "And refresh <http://localhost:3000/jobs>"
 
-error_box "JobsController#index is missing a template for this request format and variant."
+error_box "JobsController#index is missing a template for request formats: text/html."
 
 message <<-MARKDOWN
   What's a template? How does Rails decide to look for the template associated with JobsController's `index` action?
@@ -104,7 +104,7 @@ message <<-MARKDOWN
 
   # Add a view
 
-  Within app/views/jobs, add a file called index.html.erb.
+  Within app/views/jobs, create a file called index.html.erb containing `<h1>Jobs</h1> coming soon`
 
   Save that file, and refresh <http://localhost:3000/jobs>
 

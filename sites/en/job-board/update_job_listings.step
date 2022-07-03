@@ -17,10 +17,13 @@ error_box "The action 'edit' could not be found for JobsController"
 source_code_with_message "We've seen this before, right? Let's add the controller action above the word `private`:",
 <<-RUBY
   def edit
+    @job = Job.find(params[:id])
   end
 RUBY
 
-source_code_with_message "Refresh, template is missing. Alright, let's add that edit view, under app/views/jobs/edit.html.erb", :erb,
+discussion_box "Params", "What is `Job.find(params[:id])` doing? What is `params` again?"
+
+source_code_with_message "Refresh  <http://localhost:3000/jobs/1/edit>, template is missing. Alright, let's add that edit view, under app/views/jobs/edit.html.erb", :erb,
 <<-ERB
   <h1>Edit Posting</h1>
 ERB
@@ -31,8 +34,10 @@ message <<-MARKDOWN
   We could copy and paste from the other form, but we try to avoid that because duplicated code is hard to maintain. For example, if I want to add placeholder text for the inputs in the form, when the code is duplicated, I’ll need to update the code in each place the form was copied. (In large apps it’s easy to miss a place that would need to be updated.) The solution is to reuse rather than duplicate the code, and the way to reuse code in views is by using partials.
 MARKDOWN
 
-discussion_box "Don't Repeat Yourself",
+discussion_box "Don't Repeat Yourself (DRY)",
 <<-MARKDOWN
+DRY is an important principle in rails. So much so that we use DRY as a verb:
+
   * What are some reasons to DRY up our code?
   * What are some strategies for DRYing up code throughout a Rails app?
 MARKDOWN
@@ -51,19 +56,21 @@ MARKDOWN
 
 source_code :erb,
 <<-ERB
-  <%= form_for @job do |f| %>
-    <div>
-      <%= f.label :title %>
-      <%= f.text_field :title %>
-    </div>
-    <div>
-      <%= f.label :description %>
-      <%= f.text_area :description, size: '60x6' %>
-    </div>
-    <div>
-      <%= f.submit %>
-    </div>
-  <% end %>
+<%= form_with(model: @job, local: true) do |form| %>
+  <div>
+    <%= form.label :title %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div>
+    <%= form.label :description %>
+    <%= form.text_area :description, size: '60x6' %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
 ERB
 
 source_code_with_message "Now, in `app/views/jobs/new.html.erb`, add the following line:", :erb,
@@ -82,22 +89,16 @@ source_code_with_message "Now that we have a form partial, we can reuse it! In `
 <%= render "form" %>
 ERB
 
-message "Refresh the page."
+message <<-MARKDOWN
+  Refresh the page <http://localhost:3000/jobs/1/edit>
 
-error_box "First argument in form cannot contain nil or be empty"
-source_code_with_message "It looks like we don't have a job ... because we haven't gotten our job out of the database! Let's go to the jobs\\_controller and fix that. In jobs\\_controller.rb, add the following", :ruby,
-<<-RUBY
-  def edit
-    @job = Job.find(params[:id])
-  end
-RUBY
-
-discussion_box "Params", "What is `Job.find(params[:id])` doing? What is `params` again?"
+  It now shows the data from the job it loaded from the database. Good.
+MARKDOWN
 
 message <<-MARKDOWN
   # Actually Update The Job
 
-  So now the form works. Let's try to update that job posting. Change something about the job posting, and submit the form.
+  Let's try to update that job posting. Change something about the job posting, and submit the form.
 MARKDOWN
 
 error_box "The action 'update' could not be found for JobsController"
@@ -108,7 +109,7 @@ source_code_with_message "So it looks like the form is finding the right route, 
   end
 RUBY
 
-source_code_with_message "Try it again, and ... template missing error! Similarly to create, we don't have a template to render for update. So let's just send them back to the jobs listing.", :ruby,
+source_code_with_message "Try it again, and ... no output. In the logfile you will find a 'no template found' error. Similarly to create, we don't want a template to render for update. So let's just send them back to the jobs listing.", :ruby,
 <<-RUBY
   def update
     redirect_to jobs_path
@@ -122,9 +123,7 @@ MARKDOWN
 discussion_box "What is this controller method missing?", <<-MARKDOWN
   Who knows what we're missing?
 
-  Take a look at the `create` method on the jobs controller and compare what we're doing in each.
-
-  See if you can figure it out as a class.
+  Take a look at the `create` method on the jobs controller.
 
   (Spoilers below, so don't keep scrolling!)
 MARKDOWN
@@ -158,8 +157,8 @@ message <<-MARKDOWN
 
   ### Add a Link
 
-  Our users probably aren't going to know they can hit `/jobs/:id/edit` to visit the edit form, so let's add a link so it's easy to find! 
-  
+  Our users probably aren't going to know they can hit `/jobs/:id/edit` to visit the edit form, so let's add a link so it's easy to find!
+
   In `app/views/jobs/index.html.erb`, just add this line with the `<h5>` header in it ... don't copy and paste the whole thing!
 
 MARKDOWN

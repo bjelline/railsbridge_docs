@@ -24,6 +24,7 @@ error_box "The action 'new' could not be found for JobsController"
 source_code_with_message "This looks familiar! Let's add a method to our jobs controller called `new`:", :ruby,
 <<-RUBY
   def new
+    @job = Job.new
   end
 RUBY
 
@@ -48,33 +49,24 @@ MARKDOWN
 
 source_code_with_message "In the view file you were just editing (app/views/jobs/new), add the following code:", :erb,
 <<-ERB
-  <%= form_for @job do |f| %>
-    <div>
-      <%= f.label :title %>
-      <%= f.text_field :title %>
-    </div>
-    <div>
-      <%= f.label :description %>
-      <%= f.text_area :description, size: '60x6' %>
-    </div>
-    <div>
-      <%= f.submit %>
-    </div>
-  <% end %>
+<%= form_with(model: @job, local: true) do |form| %>
+  <div>
+    <%= form.label :title %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div>
+    <%= form.label :description %>
+    <%= form.text_area :description, size: '60x6' %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
 ERB
 
 message "Save that file, and reload the page."
-
-error_box "First argument in form cannot contain nil or be empty"
-
-message "What do you think that means? What is the first argument? What is it supposed to be? In order for the method `form_for` to do its job, it has to know about the thing that it's building the form for. So we need to give it an object. We do that in the controller."
-
-source_code_with_message "Open up the jobs_controller, and update the new method:", :ruby,
-<<-RUBY
-  def new
-    @job = Job.new
-  end
-RUBY
 
 message "Now we should see our mostly unstyled form!"
 

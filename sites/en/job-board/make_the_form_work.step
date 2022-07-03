@@ -24,16 +24,30 @@ source_code :ruby,
   end
 RUBY
 
-message "Try to use your form again. Unfortunately, there won't be any output, not even an error page. But if you look closely at the output from your Rails server, you might find this:"
+message "Try to use your form again. Unfortunately, there won't be any output, not even an error page."
+
+discussion_box "Logging & Server Output",
+<<-MARKDOWN
+  Arrange your screens so that you can see your server logs (in the terminal window) at the same time as your browser. Now, refresh the form page, and look at what happens in the server. You should see output like `Started GET "/jobs/new"`.
+
+  As a group or in pairs, go over the output of the server, talking through the various pieces of information you see.
+
+  Then try to submit the form again, but now look at the output from the server.
+MARKDOWN
+
+
+message "In the output from your Rails server you might find this:"
 
 error_box "No template found for JobsController#create, rendering head :no_content"
 
-<<-MARKDOWN
+message <<-MARKDOWN
   Familiar error, right? We don't have a template called create.html.erb.
 
   BUT!!! This time we're not going to make one.
 
-  We actually want to go somewhere useful, right? Let's go back to the main jobs page (where we will eventually be listing our jobs). We need to tell the create method where to go, instead of letting it decide based on method name.
+  We want to store the new job in the database, and afterward go somewhere useful: back to the main jobs page, so we can immediately see there is one more job in the list now.
+
+  We need to tell the create method where to go, instead of letting it decide based on method name.
 MARKDOWN
 
 source_code :ruby,
@@ -51,12 +65,7 @@ message <<-MARKDOWN
   Sadly, no. We just took our form contents and dropped them on the ground.
 MARKDOWN
 
-discussion_box "Logging & Server Output",
-<<-MARKDOWN
-  Arrange your screens so that you can see your server logs (in the terminal window) at the same time as your browser. Now, refresh the form page, and look at what happens in the server. You should see output like `Started GET "/jobs/new"`.
 
-  As a group or in pairs, go over the output of the server, talking through the various pieces of information you see.
-MARKDOWN
 
 message <<-MARKDOWN
   # Saving form data!
@@ -66,19 +75,18 @@ MARKDOWN
 
 source_code :http,
 <<-JSON
-  Parameters: {
-    "utf8"=>"✓",
-    "authenticity_token"=>"f48rtxanK9/MHu7TPvd6QzygGnrwv0P2/bxLllozw5U=",
-    "job"=>{
-      "title"=>"Meta-organizer",
-      "description"=>"We need an somene to organize the organizers."
-    },
-    "commit"=>"Create Job"
-  }
+Parameters: {
+  "authenticity_token"=>"[FILTERED]",
+  "job"=>{
+    "title"=>"organizer organizer",
+    "description"=>"We need an someone to organize the organizers."
+  },
+  "commit"=>"Create Job"
+}
 JSON
 
 message <<-MARKDOWN
-  This is the precious data that our form is sending, and right now we're just throwing it away. Let's not do that! Since we're using Rails 5 and all its great conventions, we're going to use Strong Parameters to limit what kind of data our form can submit to our app.
+  This is the precious data that our form is sending, and right now we're just throwing it away. Let's not do that! We're going to use Strong Parameters to limit what kind of data our form can submit to our app.
 MARKDOWN
 
 source_code_with_message "Add this code to your jobs controller. (Notice that we're expanding the create method. Don't just copy and paste and end up with two create methods, folks.)", :ruby,

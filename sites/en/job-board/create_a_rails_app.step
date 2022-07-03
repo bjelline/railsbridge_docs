@@ -20,10 +20,12 @@ message <<-MARKDOWN
   # Rails New!!!
 MARKDOWN
 
-console "rails new job_board -T --skip-turbolinks"
+console "rails new job_board -T -d sqlite3 --minimal"
 
 message <<-MARKDOWN
-  The `-T` in that command means that when you make new files using Rails generators, it doesn't automatically create test files using Test::Unit (the default Rails testing framework).
+  * The `-T` in that command means that when you make new files using Rails generators, it doesn't automatically create files for automatic testing
+  * The `-d` in that command is for choosing the database.
+  * The `--minimal` disables a dozend advanced features of rails that we won't need today
 
   Watch all the files that are created! Wow!
 
@@ -36,16 +38,15 @@ message <<-MARKDOWN
   And open the project in VS Code:
 
   * Open VS Code
-  * Under File, "Open FolderProject"
+  * Under File, "Open Folder"
 
-  (You must have at least one window open, so if that option is greyed out, open a window with cmd+n (Mac) or ctl+n (PC))
 MARKDOWN
 
 discussion_box "Text Editor vs Command Line", "Review the differences between the command line and your text editor, even if everyone already knows!"
 
 message "# Let's Talk About Dependencies"
 
-message "When we created a new Rails app, it installed a bunch of stuff by default. The list of things Rails installed is in a file called `Gemfile`. If you want to add any additional third party code (aka **gems**), you can add more lines to the `Gemfile` and install them with `bundle`."
+message "When we created a new Rails app, it installed a bunch of stuff by default. The list of things Rails installed is in a file called `Gemfile`. If you want to add any additional third party code (aka **gem**), you can add more lines to the `Gemfile` and install them with `bundle`."
 
 console_with_message "Rails has already installed all the stuff we need, but you can always run bundle again to re-install gems, or install gems newly added to the Gemfile. In the command line, run the following command:", "bundle install"
 
