@@ -74,7 +74,6 @@ class DocPage < Html5Page
         }
       }
       ul(class: "navbar-nav nav") {
-        widget Flags, locale: @locale
 
         li(class: "dropdown") {
           a("sites", href: "#", class: "dropdown-toggle", "data-toggle" => "dropdown")
@@ -114,20 +113,8 @@ class DocPage < Html5Page
 
     footer {
       p do
-        text "Going through this curriculum on your own? Get help on "
-        a "our Discourse forum", href: "http://discourse.bridgefoundry.org/c/railsbridge-help", target: "_blank"
-        text ", where RailsBridge volunteers can answer your questions."
-      end
-      p do
-        text "If you have a suggestion for improving the docs, please make a "
-        a "pull request ", href: "https://github.com/railsbridge/docs"
-        text "or "
-        a "drop us a note ", href: "https://github.com/railsbridge/docs/issues/new"
-        text "via GitHub Issues (no technical knowledge required)."
-      end
-      p do
-        text "Source: "
-        url "https://github.com/railsbridge/docs"
+        text "This is the Salzburg version of Railsbridge. find the original at "
+        a "curriculum.railsbridge.org", href: "https://curriculum.railsbridge.org/docs/", target: "_blank"
       end
     }
   end

@@ -1,5 +1,5 @@
 goals {
-  message "Usability testing (= some friends trying out the app) found that the front page is too cluttered and should look more like a list´:"
+  message "Usability testing (= some friends trying out the app) found that the front page is too cluttered and should look more like a list:"
   goal "Don't show the description on the list page"
   goal "Make the title a link and only when it's clicked show all the details like the description"
 }
@@ -51,26 +51,15 @@ steps {
 
 explanation {
 
-  source_code :erb, "<td><%= topic.description %></td>"
-
-  message "This line was getting the description using `.description` and just printing it out."
-
-  source_code :erb, "<th>Description</th>"
+  source_code :erb, "<%= link_to topic.title, topic %>"
 
   message "
-  `<th>` stands for table header and everything between `<th>` and
-  `</th>` was being printed as a table header (bold). We removed it
-  since we removed the description and it would look funny to have the
-  header and the wrong thing below it."
-
-  hr
-
-  source_code :erb, "<td><%= link_to topic.title, topic %></td>"
-
-  message "
-  Here's another use of `link_to` to create a link on the page. This
-  `link_to` creates a link using the text from the topic title and goes
-  to the topic show page."
+    In Rails, we don't write our own `<a href>` Tags, we use
+    the `link_to` helper method instead.  It takes two arguments:
+    first the text that should be displayed, and second the URL
+    we want to link to. In this case we just supplied a model,
+    and Rails figured out the URL for showing this model.
+  "
 }
 
 next_step "clean_up_links_on_the_topics_list"

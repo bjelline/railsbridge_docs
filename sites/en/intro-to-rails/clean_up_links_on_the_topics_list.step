@@ -64,6 +64,5 @@ explanation {
   MARKDOWN
 }
 
-insert 'consider_deploying_again'
 
 next_step "credits_and_next_steps"

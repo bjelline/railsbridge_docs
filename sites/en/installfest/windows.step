@@ -164,7 +164,7 @@ step "Configure the Windows Terminal" do
 
     message "It's usually better to type commands in yourself. It takes a little longer but you learn more."
 
-    message "But if you must... in these instructions, where it says: \"Type this in the terminal:\", you can usually copy the command from this page, and right click in the menu bar or terminal window, then click on \"Paste\", then hit the **[enter]** key."
+    message "But if you must... in these instructions, where it says: \"Type this in the shell:\", you can usually copy the command from this page, and right click in the menu bar or terminal window, then click on \"Paste\", then hit the **[enter]** key."
   end
 end
 

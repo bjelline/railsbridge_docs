@@ -40,35 +40,40 @@ end
   step "Play around with Topics and Votes in the Rails console" do
     message "First, make sure you've made at least one topic on the site."
 
-    console_with_message "Next, open a Rails console in a terminal window:", "rails console"
+    console_with_message "Next, open a Rails console in the shell window:", "rails console"
 
     fuzzy_result <<-CONSOLE
-      $ rails console
-      Loading development environment (Rails 7.{FUZZY}0.3{/FUZZY})
-      3.0{FUZZY}.3{/FUZZY} :{FUZZY}001{/FUZZY} >
+      {FUZZY}~/RandomWittyName{/FUZZY}$ rails console
+      Loading development environment (Rails 7{FUZZY}.0.1{/FUZZY})
+      irb(main):{FUZZY}001:0{/FUZZY}>
     CONSOLE
 
-    tip "Are you typing into the terminal or are you typing into the rails console? This makes a big difference. You can always tell the two apart by the prompt"
+    tip "Are you typing into the shell or are you typing into the rails console? This makes a big difference. You can always tell the two apart by the prompt"
 
     message "At the console, try the following things"
 
     rails_console_with_message "See how many topics exist:", "Topic.count"
 
-    message <<-MARKDOWN
-      After typing in the code and pressing enter the rails console will look like this:
 
-      ![screenshot of the rails console showing three lines of textA](img/reading-the-rails-console.png)
+    fuzzy_result <<-CONSOLE
+      irb(main):{FUZZY}001:0{/FUZZY}> Topic.count
+        Topic Count ({FUZZY}0.2ms{/FUZZY})  SELECT COUNT(*) FROM "topics"
+      => 2
+    CONSOLE
+
+    message <<-MARKDOWN
+
 
       * On the first line you see
-        * the prompt ending in with a greater-than sign,  and after that
+        * the irb-prompt ending in with a greater-than sign,  and after that
         * the code you typed in
-      * on the second line, in blue, you can see
+      * on the second line, you can see (from right to left)
         * the SQL Query that was sent to the database **SELECT COUNT(*) FROM "topics"**
-        * that it took 0.3ms to run that Query
+        * that it took 0.2ms to run that Query
         * that it was run to compute the Topic count
       * on the third line you see
         * a "fat arrow" =&gt;
-        * and after that the result: there is just one topic in this database
+        * and after that the result: there is are two topics in this database
 
       Most of the time you are only intrested in the last line with the result.
     MARKDOWN

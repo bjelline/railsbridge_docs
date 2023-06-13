@@ -3,9 +3,10 @@ goals {
   message <<-MARKDOWN
   Now that the structure is complete, let's make the flow work smoothly.
 
-  Currently when you go to <http://localhost:3000> you see the Rails Logo and Version.
+  Currently when you go to your server main page, for example  <https://randomwittyname.bjelline.repl.co/>,
+  you see the Rails Logo and Version.
 
-  It would be easier to use our app if <http://localhost:3000> went directly to the topics list.
+  It would be easier to use our app if <https://randomwittyname.bjelline.repl.co/> went directly to the topics list.
 
   In this step we'll make that happen and learn a bit about routes in Rails.
   MARKDOWN
@@ -26,7 +27,7 @@ Rails.application.routes.draw do
   end
 
   step "Confirm your changes" do
-    message "Go back to <http://localhost:3000/>. You should be taken to the topics list automatically."
+    message "Go back to your server main page. You should be taken to the topics list automatically."
   end
 }
 
@@ -45,33 +46,32 @@ explanation {
     possible URLs. To explore the URLs in more detail we can use the
     terminal.
 
-  In the terminal window type `rails routes`. You should get something that
+  In the shell window type `rails routes -c topics`. You should get something that
   looks like this:
 
   ````
-$ rails routes
-        Prefix Verb   URI Pattern                Controller#Action
-          root GET    /                          topics#index
-        topics GET    /topics(.:format)          topics#index
-               POST   /topics(.:format)          topics#create
-     new_topic GET    /topics/new(.:format)      topics#new
-   edit_topic GET    /topics/:id/edit(.:format) topics#edit
-         topic GET    /topics/:id(.:format)      topics#show
-               PATCH  /topics/:id(.:format)      topics#update
-               PUT    /topics/:id(.:format)      topics#update
-               DELETE /topics/:id(.:format)      topics#destroy
+$  rails routes -c topics
+          Prefix Verb   URI Pattern                Controller#Action
+          topics GET    /topics(.:format)          topics#index
+                 POST   /topics(.:format)          topics#create
+       new_topic GET    /topics/new(.:format)      topics#new
+      edit_topic GET    /topics/:id/edit(.:format) topics#edit
+           topic GET    /topics/:id(.:format)      topics#show
+                 PATCH  /topics/:id(.:format)      topics#update
+                 PUT    /topics/:id(.:format)      topics#update
+                 DELETE /topics/:id(.:format)      topics#destroy
+            root GET    /                          topics#index
   ````
-  This shows all the URLs your application responds to. The code that starts with colons are variables so :id means the id number of the record. The code in parenthesis is optional.
+  This shows all the URLs for the topics_controller. The code that starts with colons are variables so :id means the id number of the record. The code in parenthesis is optional.
 
-  You can also get this information on your site in development. Go to <a href="http://localhost:3000/rails/info">http://localhost:3000/rails/info</a> and you'll see something like this:
+  You can also get this information on your site in development. Go to your servers URL plus `/rails/info` and you'll see something like this:
 
   ![Screenshot of browser-based Rails routing info page](img/rails-info-routes.png)
 
-  You'll also see that table in whenever you try to access an invalid route (try <a href="http://localhost:3000/sandwich">http://localhost:3000/sandwich</a>)
+  You'll also see that table in whenever you try to access an invalid route (try your servers URL plus `/sandwich`)
 
   MARKDOWN
 }
 
-insert 'consider_deploying'
 
 next_step "voting_on_topics"

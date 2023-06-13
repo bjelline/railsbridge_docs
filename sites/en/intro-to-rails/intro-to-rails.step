@@ -22,8 +22,8 @@ application online you should understand:
 * Basic Ruby syntax
 * How to try your Ruby code (IRB)
 * How to go from requirements to a new working Rails application
-* How to get your application online
-* The basic tools a RoR (Ruby on Rails) developer uses (source control, editor, rails console, local server)
+* How to get work with your application online at replit
+* The basic tools a RoR (Ruby on Rails) developer uses (editor, rails console)
 
 ### Schedule
 
@@ -38,33 +38,43 @@ day. Probably.
 
 We're going to be working with:
 
-* Ruby 3.0 or greater
-* Rails 7.x.x  (the last two numbers are not important)
+* replit.com
+* Ruby 3.0.3 or greater
+* Rails 7.0.1  (the last two numbers are not important)
 * Bundler
 * SQLite
-* The text editor of your choice
 
 Everything should be set up the night before during our
 install-fest. Please ensure you have everything working _before_ you
 show up for RailsBridge on Saturday.
 
-You can verify that you have everything working by trying this out in your terminal:
+Go to replit.com and create a new Rails Project from the Template.
+Chose the Templated called "Rails", chose a Title for your project
+and then press the blue "+ Create Repl" button.
+
+![Browser window with topic titles that can be voted on](img/replit_rails.png)
+
+
+
+Make sure you can see a window label "Shell". In this window
+type:
 
 <div class="console"><pre>
 $ irb
 >> 1 + 2
 => 3
->> require "active_support"
-=> true
->> exit
-$
+$ exit
 </pre>
 </div>
 
-If you can do that, you are probably good to go.
+Can you see the green "Run" button in the upper middle of the replit screen?
+Press it to start your rails application. Open the webview window
+in a separate Browser Window or Browser Tab by pressing the arrow.
+
+With this setup you should be ready to edit your code an see the
+changes in the webview window.
 MARKDOWN
 
-insert 'working_effectively_and_efficiently'
 
 message <<-MARKDOWN
 ### Format

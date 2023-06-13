@@ -2,8 +2,10 @@ message <<MARKDOWN
 This site is maintained by Brigitte Jellinek. It is a fork of the
 official site <a href="https://docs.railsbridge.org/docs/">docs.railsbridge.org</a>.
 
-In this fork I am upgrading all the sites to Rails 7.
-If you find something that could be improved, please make a [pull request](https://github.com/bjelline/railsbridge_docs/).
+In this fork I am upgrading all the sites to Rails 7 and moving
+from local development and heroku.com to replit.com.
+If you find something that could be improved,
+please make a [pull request](https://github.com/bjelline/railsbridge_docs/).
 
 I hope this will be merge into the official repository and this site can go away.
 

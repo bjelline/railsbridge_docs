@@ -8,10 +8,24 @@ end
 steps do
 
   step do
+    message "Find the Tool git, and press the Button 'Initialize Git Repository'"
+  end
+
+  step do
     console "git status"
 
     message "`git status` tells you everything git sees as modified, new, or missing."
-    message "You should see a ton of stuff in red under `Untracked files`."
+    message "Right now there is nothing new to report."
+  end
+
+  step do
+    console "git log"
+
+    message "`git log` shows you everything that happend until now."
+    message "You will see one entry in the log, the 'Initial commit'."
+
+    img src: "img/repl_git_log.png", alt: "git log showing inital commit"
+
   end
 
   step do

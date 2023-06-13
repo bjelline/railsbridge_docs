@@ -9,19 +9,7 @@ class SiteIndex < Erector::Widget
       ],
       'rails' => [
         'intro-to-rails',
-        'job-board',
-        'message-board',
-        'testing-rails-applications'
-      ],
-      'frontend' => [
-        'frontend',
-        'javascript-snake-game',
-        'javascript-to-do-list',
-        'javascript-to-do-list-with-react'
-      ],
-      'ruby' => [
-        'learn-to-code',
-        'ruby'
+        'job-board'
       ]
     }
   end

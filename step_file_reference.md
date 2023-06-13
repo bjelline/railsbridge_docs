@@ -88,7 +88,7 @@ Special elements do *not* format their text as Markdown.
 `console "text"`
 
   * indicates that the student should type something in the terminal
-  * says "type this in the terminal:" and then puts the text in a `pre` block
+  * says "type this in the shell:" and then puts the text in a `pre` block
   * [should this be named `terminal` or `type` instead?]
 
 `result "text"`

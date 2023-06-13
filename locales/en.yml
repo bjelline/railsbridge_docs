@@ -1,5 +1,6 @@
 en:
   captions:
+    shell: "Type this in the shell:"
     terminal: "Type this in the terminal:"
     irb: "Type this in irb:"
     result: "Expected result:"

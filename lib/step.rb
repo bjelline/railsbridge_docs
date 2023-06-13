@@ -246,12 +246,12 @@ class Step < Erector::Widget
     end
   end
 
-  def console_without_message(commands)
+  def rails_console_without_message(commands)
     rails_console_with_message("", commands)
   end
 
   def console(commands)
-    console_with_message(I18n.t('captions.terminal'), commands)
+    console_with_message(I18n.t('captions.shell'), commands)
   end
 
   def console_with_message(message, commands)
@@ -260,6 +260,8 @@ class Step < Erector::Widget
       pre commands.strip_heredoc
     end
   end
+
+
 
   def console_without_message(commands)
     console_with_message("", commands)

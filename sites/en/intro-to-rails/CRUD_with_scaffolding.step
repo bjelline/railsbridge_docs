@@ -64,6 +64,10 @@ explanation {
 
   ![Screenshot of files and folders](img/topic_files_and_folders.png)
 
+  * `app/controllers/topics_controller.rb`
+    * This is the controller file that Rails created as part of the scaffold
+    * If you look inside, you'll see a method (a line beginning with
+      <code>def</code>) for each of the views listed below.
 
   * `app/models/topic.rb`
     * This file contains code for our topic model. If you look inside,
@@ -72,8 +76,7 @@ explanation {
 
   * `app/views/topics`
     * This folder contains all the views for our topics model. This is
-      where the code for the forms you used above is stored. Rails
-      created all of these pages as part of the scaffold.
+      where the HTML for the pages you used is stored.
     * If you've written HTML before, many lines in the views should
       look familiar. Rails views are HTML with some extra code added
       to display data from the database.
@@ -109,10 +112,6 @@ explanation {
     * Challenge question: Can you find the line of code in new.html.erb
       and edit.html.erb that makes the form partial appear?
 
-  * `app/controllers/topics_controller.rb`
-    * This is the controller file that Rails created as part of the scaffold
-    * If you look you'll see a method (a line beginning with
-      <code>def</code>) for each of the views listed above.
     MARKDOWN
 }
 

@@ -28,7 +28,7 @@ require 'jquery-cdn'
 class InstallFest < Sinatra::Application   # todo: use Sinatra::Base instead, with more explicit config
   include Erector::Mixin
 
-  DEFAULT_SITES = {en: "docs", es: "hola", :"zh-tw" => "nihao" }
+  DEFAULT_SITES = {en: "docs" }
 
   # Set available locales in Array of Strings; this is also used when
   # checking availability in dynamic locale assignment, they must be strings.
@@ -96,7 +96,6 @@ class InstallFest < Sinatra::Application   # todo: use Sinatra::Base instead, wi
   def redirect_sites
     {
       'curriculum' => 'intro-to-rails',
-      'intermediate-rails' => 'message-board'
     }
   end
 
